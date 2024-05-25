@@ -1,13 +1,13 @@
 from django.urls import path, include
+from .views import IncomeViewSet, ExpenseViewSet, IncomeListPageView, ExpenseListPageView
 from rest_framework.routers import DefaultRouter
-from .views import IncomeViewSet, ExpenseViewSet
 
-# Create a router and register our viewsets with it.
 router = DefaultRouter()
-router.register(r'incomes', IncomeViewSet)
-router.register(r'expenses', ExpenseViewSet)
+router.register(r'income', IncomeViewSet, basename='income')
+router.register(r'expense', ExpenseViewSet, basename='expense')
 
-# The API URLs are now determined automatically by the router.
 urlpatterns = [
+    path('incomes/', IncomeListPageView.as_view(), name='income-list'),
+    path('expenses/', ExpenseListPageView.as_view(), name='expense-list'),
     path('', include(router.urls)),
 ]
