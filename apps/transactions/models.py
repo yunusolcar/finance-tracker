@@ -4,6 +4,7 @@ from datetime import date
 from datetime import timedelta
 from dateutil.relativedelta import relativedelta
 
+
 class Income(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     name = models.CharField(max_length=100)
