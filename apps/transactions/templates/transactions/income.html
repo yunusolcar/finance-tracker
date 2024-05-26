@@ -46,7 +46,7 @@
                         $('#income-list').empty();
                         data.forEach(function(income) {
                             $('#income-list').append(
-                                '<tr><td>' + income.name + '</td><td>' + income.amount + '</td><td>' + income.date + '</td></tr>'
+                                '<tr><td>' + income.name + '</td><td>' + income.amount + '</td><td>' + income.date + '</td><td>' + (income.is_recurring ? 'Yes' : 'No') + '</td></tr>'
                             );
                         });
                     }
@@ -62,6 +62,9 @@
                 const description = $('#description').val();
                 const amount = $('#amount').val();
                 const date = $('#date').val();
+                const is_recurring = $('#is_recurring').is(':checked');
+                const frequency = $('#frequency').val();
+                const end_date = $('#end_date').val();
 
                 $.ajax({
                     url: '/api/v1/incomes/',
@@ -70,7 +73,10 @@
                         name: name,
                         description: description,
                         amount: amount,
-                        date: date
+                        date: date,
+                        is_recurring: is_recurring,
+                        frequency: frequency,
+                        end_date: end_date
                     },
                     success: function() {
                         fetchIncomes();
@@ -81,6 +87,18 @@
                     }
                 });
             });
+
+            // Show/hide frequency and end date fields based on is_recurring checkbox
+            $('#is_recurring').change(function() {
+                if (this.checked) {
+                    $('#recurring-fields').show();
+                } else {
+                    $('#recurring-fields').hide();
+                }
+            });
+
+            // Initially hide the recurring fields
+            $('#recurring-fields').hide();
         });
     </script>
 </head>
@@ -93,6 +111,7 @@
                     <th>Name</th>
                     <th>Amount</th>
                     <th>Date</th>
+                    <th>Recurring</th>
                 </tr>
             </thead>
             <tbody id="income-list">
@@ -117,6 +136,25 @@
             <div class="form-group">
                 <label for="date">Date:</label>
                 <input type="date" id="date" name="date" class="form-control" required>
+            </div>
+            <div class="form-group form-check">
+                <input type="checkbox" id="is_recurring" name="is_recurring" class="form-check-input">
+                <label for="is_recurring" class="form-check-label">Is Recurring</label>
+            </div>
+            <div id="recurring-fields">
+                <div class="form-group">
+                    <label for="frequency">Frequency:</label>
+                    <select id="frequency" name="frequency" class="form-control">
+                        <option value="daily">Daily</option>
+                        <option value="weekly">Weekly</option>
+                        <option value="monthly">Monthly</option>
+                        <option value="yearly">Yearly</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="end_date">End Date:</label>
+                    <input type="date" id="end_date" name="end_date" class="form-control">
+                </div>
             </div>
             <button type="submit" class="btn btn-primary">Add Income</button>
         </form>
