@@ -40,7 +40,7 @@
             // Fetch expenses
             function fetchExpenses() {
                 $.ajax({
-                    url: '/api/expense/',
+                    url: '/api/v1/expenses/',
                     method: 'GET',
                     success: function(data) {
                         $('#expense-list').empty();
@@ -64,7 +64,7 @@
                 const date = $('#date').val();
 
                 $.ajax({
-                    url: '/api/expense/',
+                    url: '/api/v1/expense/',
                     method: 'POST',
                     data: {
                         name: name,

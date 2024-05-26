@@ -40,7 +40,7 @@
             // Fetch incomes
             function fetchIncomes() {
                 $.ajax({
-                    url: '/api/income/',
+                    url: '/api/v1/incomes/',
                     method: 'GET',
                     success: function(data) {
                         $('#income-list').empty();
@@ -64,7 +64,7 @@
                 const date = $('#date').val();
 
                 $.ajax({
-                    url: '/api/income/',
+                    url: '/api/v1/incomes/',
                     method: 'POST',
                     data: {
                         name: name,
