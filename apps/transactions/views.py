@@ -64,3 +64,23 @@ class MonthlyProfitLoss(APIView):
 
         monthly_profit_loss = incomes - expenses
         return Response({'monthly_profit_loss': monthly_profit_loss})
+
+
+class AnnualProfitLoss(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        user = request.user
+        today = timezone.now()
+        start_of_year = today.replace(month=1, day=1)
+        end_of_year = today.replace(month=12, day=31)
+
+        incomes = Income.objects.filter(user=user, date__gte=start_of_year, date__lte=end_of_year).aggregate(
+            total_income=Sum('amount'))['total_income'] or 0
+
+        expenses = Expense.objects.filter(user=user, date__gte=start_of_year, date__lte=end_of_year).aggregate(
+            total_expense=Sum('amount'))['total_expense'] or 0
+
+        annual_profit_loss = incomes - expenses
+        return Response({'annual_profit_loss': annual_profit_loss})
+
